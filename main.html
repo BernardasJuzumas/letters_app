@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn the keyboard</title>
+    <style>
+        /*@import url('https://fonts.googleapis.com/css?family=Bowlby+One+SC');*/
+        @import url('https://fonts.googleapis.com/css?family=Titan+One');
+
+        header, #printout{
+            text-align: center;
+            /*font-family: 'Bowlby One SC', cursive;*/
+            font-family: 'Titan One', cursive;
+            overflow: hidden;
+        }
+        header {
+            font-size: 15vh;
+        }
+        header div{
+            display: inline;
+            margin-left: 2vh;
+        }
+        #printout{
+            font-size: 45vh;
+        }
+        body {
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <header id="log">
+        <!---Here we add all pressed key representations separated with comma symbol-->
+        header
+    </header>
+    <section id="printout">
+        <!--This displays element in question-->
+        Test
+    </section>
+    <script>
+        //app
+        const letters = ['r','a','i','d','e','l','e','s',]
+        
+        window.onload = function() {
+            document.getElementsByTagName('body')[0].onkeyup = function(e) { 
+                var ev = e || event;
+
+                key = ev.key.toUpperCase();
+                printKey(key);
+
+                letters.push(key);
+                letters.shift();
+
+                printKeyHistory(letters);
+
+            }
+        }
+        function printKey(key){
+            document.getElementById("printout").textContent = key;
+            document.getElementById("printout").style.color = getColorForKeyCode(key);
+        }
+
+        function printKeyHistory(keys){
+            let print_text = ''
+            keys.forEach(key =>  (
+                print_text += "<div style='color: "+ getColorForKeyCode(key)+"'>" + key + "</div>"
+                ));
+            document.getElementById("log").innerHTML = print_text;
+        }
+        function getColorForKeyCode(key){
+            //get numeric value of a string
+            num = key.toUpperCase().charCodeAt(0)
+
+            //below uses magic seed to make different colors for each number provided. Original formula was "Math.floor(num*16777215).toString(16)", but rersults were too similar as char codes are very close together
+            //substring is used in cases where result goes beyond 6 characters (constant color code length)
+            return "#" +  Math.floor(Math.sqrt(num)*num*0.001*16777215).toString(16).substr(0,6);
+        }
+    </script>
+</body>
+</html>
