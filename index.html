@@ -41,28 +41,37 @@
     </section>
     <script>
         //app
-        const letters = ['r','a','i','d','e','l','e','s',]
+
+        //initial array of letters. This is made as a buffer array thus will maintain its original size.
+        const keys = ['r','a','i','d','e','l','e','s',]
         
         window.onload = function() {
+            //show initial array of keys
+            printKeyHistory();
+
             document.getElementsByTagName('body')[0].onkeyup = function(e) { 
                 var ev = e || event;
 
                 key = ev.key.toUpperCase();
                 printKey(key);
-
-                letters.push(key);
-                letters.shift();
-
-                printKeyHistory(letters);
-
+                addKeyToBuffer(key);
+                //rerender keys from buffer
+                printKeyHistory();
+                
             }
+        }
+        function addKeyToBuffer(key){
+            //add key
+            keys.push(key);
+            //maintain buffer size
+            keys.shift();
         }
         function printKey(key){
             document.getElementById("printout").textContent = key;
             document.getElementById("printout").style.color = getColorForKeyCode(key);
         }
 
-        function printKeyHistory(keys){
+        function printKeyHistory(){
             let print_text = ''
             keys.forEach(key =>  (
                 print_text += "<div style='color: "+ getColorForKeyCode(key)+"'>" + key + "</div>"
@@ -72,8 +81,8 @@
         function getColorForKeyCode(key){
             //get numeric value of a string
             num = key.toUpperCase().charCodeAt(0)
-
-            //below uses magic seed to make different colors for each number provided. Original formula was "Math.floor(num*16777215).toString(16)", but rersults were too similar as char codes are very close together
+            //below uses magic seed to make different colors for each number provided. Original formula was "Math.floor(num*16777215).toString(16)", 
+            //but rersults were too similar as char codes are very close together
             //substring is used in cases where result goes beyond 6 characters (constant color code length)
             return "#" +  Math.floor(Math.sqrt(num)*num*0.001*16777215).toString(16).substr(0,6);
         }
